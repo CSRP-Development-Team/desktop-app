@@ -36,7 +36,12 @@ npm run dev      # run against the live panel
 npm run build    # produce an installer for the current platform
 ```
 
-Push a `v*` tag, or run the workflow by hand, to build all three platforms.
+Push a `v*` tag to build all three platforms and collect the installers into a
+draft release. Running the workflow by hand builds without releasing.
+
+The version in the installer filenames comes from `tauri.conf.json`, not from
+the tag, and is repeated in `Cargo.toml` and `package.json`. Nothing keeps the
+three in step, so bump all of them before tagging.
 
 ## Pointing it somewhere else
 

@@ -28,6 +28,12 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
+      # A cold build compiles Tauri and its dependencies from scratch, which is
+      # most of the ten minutes. Cached, a rerun is a couple.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -53,3 +59,33 @@ jobs:
             src-tauri/target/release/bundle/**/*.AppImage
             src-tauri/target/release/bundle/**/*.deb
           if-no-files-found: ignore
+
+  # Artifacts expire and are only visible to people with repository access, so a
+  # tagged build is also collected into a release. It is left as a draft: nobody
+  # downloads an unsigned installer before somebody has run it once.
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: artifacts/**/*
+          fail_on_unmatched_files: true
+          body: |
+            Installers for CSRP Moderation.
+
+            Windows and macOS builds are unsigned. Windows shows a SmartScreen
+            warning, and macOS needs the app opened from its right click menu
+            the first time rather than double clicked.
+
+            The macOS build is Apple Silicon only.
