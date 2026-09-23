@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CSRP Moderation",
+  "version": "0.1.0",
+  "identifier": "com.officialcaliforniastateroleplay.moderation",
+  "build": {
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "dmg", "deb", "appimage"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ],
+    "category": "Productivity",
+    "shortDescription": "CSRP Moderation staff panel",
+    "longDescription": "Manage staff, shifts, moderations and your ER:LC server from the desktop. Keeps running in the tray so alerts still arrive with the window closed."
+  }
+}
