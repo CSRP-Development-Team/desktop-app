@@ -15,7 +15,12 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "dmg", "deb", "appimage"],
+    "targets": [
+      "nsis",
+      "dmg",
+      "deb",
+      "appimage"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -26,5 +31,14 @@
     "category": "Productivity",
     "shortDescription": "CSRP Moderation staff panel",
     "longDescription": "Manage staff, shifts, moderations and your ER:LC server from the desktop. Keeps running in the tray so alerts still arrive with the window closed."
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": [
+          "csrp-moderation"
+        ]
+      }
+    }
   }
 }

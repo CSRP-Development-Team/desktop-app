@@ -1,6 +1,96 @@
 <!doctype html>
-<meta charset="utf-8" />
-<title>CSRP Moderation</title>
-<!-- The window is built in Rust and points at the hosted panel, so this file
-     exists only to satisfy the bundler's need for a frontend directory. -->
-<body style="background:#050505"></body>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>CSRP Moderation</title>
+		<style>
+			:root {
+				color-scheme: dark;
+			}
+
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: grid;
+				place-items: center;
+				background: #050505;
+				color: #f4f4f5;
+				font-family: ui-sans-serif, system-ui, sans-serif;
+				text-align: center;
+				padding: 24px;
+			}
+
+			main {
+				max-width: 30rem;
+			}
+
+			h1 {
+				font-size: 1.25rem;
+				font-weight: 600;
+			}
+
+			p {
+				color: #a1a1aa;
+				line-height: 1.6;
+			}
+
+			button {
+				margin-top: 8px;
+				padding: 10px 18px;
+				border: 1px solid #27272a;
+				border-radius: 8px;
+				background: #18181b;
+				color: #f4f4f5;
+				font: inherit;
+				cursor: pointer;
+			}
+
+			button:hover {
+				background: #27272a;
+			}
+
+			[hidden] {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<p id="loading">Loading CSRP Moderation</p>
+
+			<div id="waiting" hidden>
+				<h1>Finish signing in</h1>
+				<p>
+					Your browser has the Discord sign-in. Once it is done this window picks up on its
+					own.
+				</p>
+				<button id="retry" type="button">Open sign in again</button>
+			</div>
+		</main>
+
+		<script>
+			const invoke = window.__TAURI__ && window.__TAURI__.core.invoke;
+
+			document.getElementById('retry').addEventListener('click', () => {
+				if (invoke) invoke('sign_in');
+			});
+
+			if (invoke) {
+				invoke('start')
+					.then((start) => {
+						if (start.waiting) {
+							document.getElementById('loading').hidden = true;
+							document.getElementById('waiting').hidden = false;
+							return;
+						}
+
+						location.replace(start.url);
+					})
+					.catch(() => {
+						document.getElementById('loading').textContent =
+							'CSRP Moderation could not start.';
+					});
+			}
+		</script>
+	</body>
+</html>
