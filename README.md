@@ -43,6 +43,24 @@ The version in the installer filenames comes from `tauri.conf.json`, not from
 the tag, and is repeated in `Cargo.toml` and `package.json`. Nothing keeps the
 three in step, so bump all of them before tagging.
 
+## Signing
+
+The macOS build signs and notarizes itself when these repository secrets are
+set, and builds unsigned when they are not:
+
+| secret | what it is |
+| --- | --- |
+| `APPLE_CERTIFICATE` | the Developer ID Application `.p12`, base64 encoded |
+| `APPLE_CERTIFICATE_PASSWORD` | the password that `.p12` was exported with |
+| `APPLE_SIGNING_IDENTITY` | `Developer ID Application: Name (TEAMID)` |
+| `APPLE_ID` | the Apple account used for notarization |
+| `APPLE_PASSWORD` | an app specific password, not the account password |
+| `APPLE_TEAM_ID` | the ten character team id |
+
+A signed and notarized build opens with no warning at all. The Windows build is
+still unsigned, which needs a code signing certificate issued to a registered
+organization and is a separate problem.
+
 ## Pointing it somewhere else
 
 The panel URL is baked in at compile time and defaults to the production panel.

@@ -46,7 +46,17 @@ jobs:
 
       - run: npm install
 
+      # Tauri signs and notarizes the macOS build when these are present, and
+      # builds unsigned when they are not, so the workflow works either way.
+      # The other platforms ignore them.
       - name: Build
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: npm run build
 
       - uses: actions/upload-artifact@v4
@@ -84,8 +94,7 @@ jobs:
           body: |
             Installers for CSRP Moderation.
 
-            Windows and macOS builds are unsigned. Windows shows a SmartScreen
-            warning, and macOS needs the app opened from its right click menu
-            the first time rather than double clicked.
+            The Windows build is unsigned and shows a SmartScreen warning the
+            first time. Choose More info, then Run anyway.
 
             The macOS build is Apple Silicon only.
